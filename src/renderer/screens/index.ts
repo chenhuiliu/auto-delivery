@@ -1,6 +1,5 @@
-import ErrorScreen from '@/renderer/screens/ErrorScreen.vue'
-import MainScreen from '@/renderer/screens/MainScreen.vue'
-import SecondScreen from '@/renderer/screens/SecondScreen.vue'
 import LoginScreen from '@/renderer/screens/LoginScreen.vue'
+import SignUpScreen from '@/renderer/screens/SignUpScreen.vue'
+import ConfigScreen from '@/renderer/screens/ConfigScreen.vue'
 
-export { ErrorScreen, MainScreen, SecondScreen, LoginScreen }
+export { LoginScreen, SignUpScreen, ConfigScreen }

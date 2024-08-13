@@ -9,25 +9,23 @@ const handleRoute = (path: string): void => {
 
 </script>
 <template>
-  <div class="login-screen">
+  <div class="sign-up-screen">
     <div class="form-container">
-      <p class="title">Welcome back</p>
+      <p class="title">Sign Up</p>
       <form class="form">
         <input type="email" class="input" placeholder="Email">
         <input type="password" class="input" placeholder="Password">
-        <p class="page-link">
-          <span class="page-link-label">Forgot Password?</span>
-        </p>
-        <button class="form-btn" @click="handleRoute('/config')">Log in</button>
+        <input type="password" class="input" placeholder="Confirm Password">
+        <button class="form-btn" @click="handleRoute('/login')">Sign Up</button>
       </form>
-      <p class="sign-up-label">
-        Don't have an account?<span class="sign-up-link" @click="handleRoute('/sign_up')">Sign up</span>
+      <p class="login-in-label">
+        Have an account?<span class="login-in-link" @click="handleRoute('/login')">Login Here</span>
       </p>
     </div>
   </div>
 </template>
 <style scoped>
-.login-screen {
+.sign-up-screen {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -72,26 +70,6 @@ const handleRoute = (path: string): void => {
   border-color: teal;
 }
 
-.page-link {
-  text-decoration: underline;
-  margin: 0;
-  text-align: end;
-  color: #747474;
-  text-decoration-color: #747474;
-}
-
-.page-link-label {
-  cursor: pointer;
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-        "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-  font-size: 9px;
-  font-weight: 700;
-}
-
-.page-link-label:hover {
-  color: #000;
-}
-
 .form-btn {
   padding: 10px 15px;
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
@@ -109,7 +87,7 @@ const handleRoute = (path: string): void => {
   box-shadow: none;
 }
 
-.sign-up-label {
+.login-in-label {
   margin: 0;
   font-size: 10px;
   color: #747474;
@@ -117,7 +95,7 @@ const handleRoute = (path: string): void => {
         "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
-.sign-up-link {
+.login-in-link {
   margin-left: 1px;
   font-size: 11px;
   text-decoration: underline;

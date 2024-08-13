@@ -1,4 +1,4 @@
-import { MainScreen, LoginScreen } from '@/renderer/screens'
+import { LoginScreen, SignUpScreen, ConfigScreen } from '@/renderer/screens'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 export default createRouter({
@@ -12,17 +12,17 @@ export default createRouter({
       }
     },
     {
-      path: '/main',
-      component: MainScreen,
+      path: '/sign_up',
+      component: SignUpScreen,
       meta: {
-        titleKey: 'title.main'
+        titleKey: 'title.sign_up'
       }
     },
     {
-      path: '/second',
-      component: () => import('@/renderer/screens/SecondScreen.vue'),
+      path: '/config',
+      component: ConfigScreen,
       meta: {
-        titleKey: 'title.second'
+        titleKey: 'title.config'
       }
     },
     {
