@@ -1,4 +1,4 @@
-import { MainScreen } from '@/renderer/screens'
+import { MainScreen, LoginScreen } from '@/renderer/screens'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 export default createRouter({
@@ -6,6 +6,13 @@ export default createRouter({
   routes: [
     {
       path: '/',
+      component: LoginScreen,
+      meta: {
+        titleKey: 'title.login'
+      }
+    },
+    {
+      path: '/main',
       component: MainScreen,
       meta: {
         titleKey: 'title.main'
