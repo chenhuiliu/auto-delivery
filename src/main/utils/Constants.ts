@@ -21,6 +21,6 @@ export default class Constants {
     preload: join(__dirname, '../preload/index.js')
   }
 
-  static APP_INDEX_URL_DEV = 'http://localhost:5173/index.html'
+  static APP_INDEX_URL_DEV = 'http://localhost:3000/index.html'
   static APP_INDEX_URL_PROD = join(__dirname, '../index.html')
 }

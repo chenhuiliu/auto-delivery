@@ -1,18 +1,16 @@
-<!-- <script setup lang="tsx">
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-
-const handleRoute = (path: string): void => {
-  router.push(path)
-}
-
-</script> -->
 <template>
   <div class="home-screen">
     <div class="card">
       <h3 class="card__title">Boss</h3>
-      <p class="card__content">Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
+      <div class="card__content">
+        <p>
+          <span>投递职位:</span>
+          <span ></span>
+        </p>
+        <p>薪资: </p>
+        <p>屏蔽公司: </p>
+        <p>屏蔽HR: </p>
+      </div>
       <div class="card__date">
         April 15, 2022
       </div>
@@ -36,12 +34,29 @@ const handleRoute = (path: string): void => {
     </div>
   </div>
 </template>
+<script setup lang="tsx">
+import { ref, onMounted } from "vue"
+
+const configList = ref<string[]>([])
+
+const init = () => {
+  const configition = window.localStorage.getItem("DELIVERY_CONFIGITION")
+  if (configition) {
+    configList.value = JSON.parse(configition)
+  }
+}
+
+onMounted(() => {
+  init()
+})
+
+</script>
 <style scoped>
 .home-screen {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 100%;
+  height: 100vh;
   padding: 20px;
 }
 .form-container {
@@ -81,6 +96,7 @@ const handleRoute = (path: string): void => {
   padding: 0;
   font-size: 1.3rem;
   font-weight: bold;
+  margin: 0;
 }
 
 .card .card__date {

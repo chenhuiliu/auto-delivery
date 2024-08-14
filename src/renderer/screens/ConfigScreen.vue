@@ -1,30 +1,163 @@
 <template>
   <div class="config-screen">
     <div class="form-container">
-      <p class="title">个人配置</p>
-      <form class="form">
-        <label for="job-name">职位名称</label>
-        <label for="salary-range">薪资范围</label>
-        <label for="company-filter">过滤公司</label>
-        <label for="HR-filter">过滤HR</label>
-        <div class="form-btn-group">
-          <button class="form-btn">提交</button>
-          <button class="form-btn">取消</button>
-        </div>
-      </form>
+      <p class="title">投递配置</p>
+      <a-form class="form" :model="formState" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
+        <a-form-item label="职位名称" name="jobName">
+          <a-input-group compact style="width: 400px">
+            <a-input v-model:value="jobName" style="width: calc(100% - 200px)" placeholder="请输入需要投递的职位名称" @press-enter="submitJob" />
+            <a-button type="primary" @click="submitJob">提交</a-button>
+          </a-input-group>
+          <div v-if="formState.jobList.length > 0" class="filter-list">
+            <a-tag v-for="(job, index) in formState.jobList" :key="index" closable>{{ job }}</a-tag>
+          </div>
+        </a-form-item>
+
+        <a-form-item label="薪资范围" name="salaryRange">
+          <a-input-group compact>
+            <a-input
+              v-model:value="formState.salaryMin"
+              style="width: 100px; text-align: center"
+              placeholder="最低薪资"
+            />
+            <a-input
+              class="site-input-split"
+              style="width: 30px; border-left: 0; pointer-events: none"
+              placeholder="~"
+              disabled
+            />
+            <a-input
+              v-model:value="formState.salaryMax"
+              class="site-input-right"
+              style="width: 100px; text-align: center"
+              placeholder="最高薪资"
+            />
+          </a-input-group>
+        </a-form-item>
+        <a-form-item label="屏蔽公司" name="shieldCompany">
+          <a-input-group compact style="width: 400px">
+            <a-input v-model:value="companyName" style="width: calc(100% - 200px)" placeholder="请输入需要屏蔽的公司" @press-enter="submitCompany" />
+            <a-button type="primary" @click="submitCompany">提交</a-button>
+          </a-input-group>
+          <div v-if="formState.companyList.length > 0" class="filter-list">
+            <a-tag v-for="(company, index) in formState.companyList" :key="index" closable>{{ company }}</a-tag>
+          </div>
+        </a-form-item>
+
+        <a-form-item label="屏蔽HR" name="shieldHR">
+          <a-input-group compact style="width: 400px">
+            <a-input v-model:value="hrName" style="width: calc(100% - 200px)" placeholder="请输入需要屏蔽的HR" @press-enter="submitHR" />
+            <a-button type="primary" @click="submitHR">提交</a-button>
+          </a-input-group>
+          <div v-if="formState.hrList.length > 0" class="filter-list">
+            <a-tag v-for="(hr, index) in formState.hrList" :key="index" closable>{{ hr }}</a-tag>
+          </div>
+        </a-form-item>
+
+        <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
+          <a-button style="margin-right: 10px" @click="onCancel">取消</a-button>
+          <a-button type="primary" @click="onSubmit" @enter="onSubmit">提交</a-button>
+        </a-form-item>
+      </a-form>
     </div>
   </div>
 </template>
-<style scoped>
+<script setup lang="tsx">
+import { message } from "ant-design-vue";
+import { ref, reactive } from "vue"
+import { useRouter } from 'vue-router'
+import { useRoute } from "vue-router"
+
+const router = useRouter()
+const route = useRoute()
+
+const jobName = ref("")
+const companyName = ref("")
+const hrName = ref("")
+
+interface FormState {
+  jobList: string[];
+  companyList: string[];
+  hrList: string[];
+  salaryMin: string;
+  salaryMax: string;
+}
+
+const formState = reactive<FormState>({
+  jobList: [],
+  companyList: [],
+  hrList: [],
+  salaryMin: "",
+  salaryMax: ""
+});
+
+const submitJob = () => {
+  const index = formState.jobList.findIndex((job) => job === jobName.value)
+  if (index === -1) {
+    formState.jobList.push(jobName.value)
+    jobName.value = ""
+  } else {
+    message.error("该职位已存在")
+  }
+}
+
+const submitCompany = () => {
+  const index = formState.companyList.findIndex((company) => company === companyName.value)
+  if (index === -1) {
+    formState.companyList.push(companyName.value)
+    companyName.value = ""
+  } else {
+    message.error("该公司已存在")
+  }
+}
+
+const submitHR = () => {
+  const index = formState.hrList.findIndex((hr) => hr === hrName.value)
+  if (index === -1) {
+    formState.hrList.push(hrName.value)
+    hrName.value = ""
+  } else {
+    message.error("该HR已存在")
+  }
+}
+
+const onSubmit = () => {
+  const from = route.query.type
+  const data = {
+    ...formState,
+    id: from
+  }
+  const configition = window.localStorage.getItem("DELIVERY_CONFIGITION")
+
+  if (configition) {
+    const list = JSON.parse(configition)
+    const index = list.findIndex((item) => item.id === from)
+    if (index === 1) {
+      list.push(data)
+    } else {
+      list[index] = data
+    }
+    window.localStorage.setItem("DELIVERY_CONFIGITION", JSON.stringify(list))
+  } else {
+    window.localStorage.setItem("DELIVERY_CONFIGITION", JSON.stringify([data]))
+  }
+
+}
+
+const onCancel = () => {
+  router.push("/home")
+}
+
+</script>
+<style scoped lang="less">
 .config-screen {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  height: 100vh;
 }
 .form-container {
-  width: 350px;
-  height: 500px;
+  width: 80%;
   background-color: #fff;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   border-radius: 10px;
@@ -32,50 +165,19 @@
   padding: 20px 30px;
 }
 
-.title {
-  text-align: center;
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-        "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-  margin: 10px 0 30px 0;
-  font-size: 28px;
-  font-weight: 800;
-}
-
 .form {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  margin-bottom: 15px;
+  .filter-list {
+    margin: 10px 0;
+  }
 }
 
-.input {
-  border-radius: 20px;
-  border: 1px solid #c0c0c0;
+.salary {
   outline: 0 !important;
   box-sizing: border-box;
-  padding: 12px 15px;
+  margin-right: 10px;
 }
 
-.input:focus {
+.salary:focus {
   border-color: teal;
 }
-
-.form-btn {
-  padding: 10px 15px;
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-        "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-  border-radius: 20px;
-  border: 0 !important;
-  outline: 0 !important;
-  background: teal;
-  color: white;
-  cursor: pointer;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-}
-
-.form-btn:active {
-  box-shadow: none;
-}
-
 </style>
