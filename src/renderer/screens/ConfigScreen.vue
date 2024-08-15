@@ -1,7 +1,7 @@
 <template>
   <div class="config-screen">
     <div class="form-container">
-      <p class="title">投递配置</p>
+      <p class="title">{{ deliveryType }}招聘配置</p>
       <a-form class="form" :model="formState" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
         <a-form-item label="职位名称" name="jobName">
           <a-input-group compact style="width: 400px">
@@ -74,6 +74,7 @@ const route = useRoute()
 const jobName = ref("")
 const companyName = ref("")
 const hrName = ref("")
+const deliveryType = route.query.type
 
 interface FormState {
   jobList: string[];
@@ -122,16 +123,15 @@ const submitHR = () => {
 }
 
 const onSubmit = () => {
-  const from = route.query.type
   const data = {
     ...formState,
-    id: from
+    id: deliveryType
   }
   const configition = window.localStorage.getItem("DELIVERY_CONFIGITION")
 
   if (configition) {
     const list = JSON.parse(configition)
-    const index = list.findIndex((item) => item.id === from)
+    const index = list.findIndex((item) => item.id === deliveryType)
     if (index === 1) {
       list.push(data)
     } else {

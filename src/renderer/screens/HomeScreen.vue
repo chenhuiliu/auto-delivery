@@ -1,43 +1,65 @@
 <template>
   <div class="home-screen">
-    <div class="card">
-      <h3 class="card__title">Boss</h3>
-      <div class="card__content">
-        <p>
-          <span>投递职位:</span>
-          <span ></span>
-        </p>
-        <p>薪资: </p>
-        <p>屏蔽公司: </p>
-        <p>屏蔽HR: </p>
+    <div class="home-content">
+      <div class="home-content-header">
+        <div class="header-left">
+          <a-checkbox
+            v-model:checked="state.checkAll"
+            :indeterminate="state.indeterminate"
+            @change="onCheckAllChange"
+          >
+            全选
+          </a-checkbox>
+          <a-checkbox-group v-model:value="state.checkedList" :options="plainOptions" />
+        </div>
+        <div class="header-right">
+          <a-button type="primary">投递</a-button>
+        </div>
       </div>
-      <div class="card__date">
-        April 15, 2022
+      <div class="card" v-for="(config, index) in configList" :key="index">
+        <h3 class="card-title">{{ config.id }}</h3>
+        <div class="card-content">
+          <p class="card-content-item">
+            <span>投递职位:</span>
+            <span v-for="(item, index) in config.jobList" :key="index">{{ item }}</span>
+          </p>
+          <p class="card-content-item">
+            薪资: {{ config.salaryMin }} - {{ config.
+            salaryMax }}
+          </p>
+          <p class="card-content-item">
+            <span>屏蔽公司:</span>
+            <span v-for="(item, index) in config.companyList" :key="index">{{ item }}</span>
+          </p>
+          <p class="card-content-item">
+            <span>屏蔽HR: </span>
+            <span v-for="(item, index) in config.hrList" :key="index">{{ item }}</span>
+          </p>
+        </div>
+        <div class="card__arrow">编辑</div>
       </div>
-      <div class="card__arrow">投递</div>
-    </div>
-    <div class="card">
-      <h3 class="card__title">拉勾</h3>
-      <p class="card__content">Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
-      <div class="card__date">
-        April 15, 2022
-      </div>
-      <div class="card__arrow">投递</div>
-    </div>
-    <div class="card">
-      <h3 class="card__title">智联</h3>
-      <p class="card__content">Lorem ipsum dolor sit amet consectetur adipisicing elit. </p>
-      <div class="card__date">
-        April 15, 2022
-      </div>
-      <div class="card__arrow">投递</div>
     </div>
   </div>
 </template>
 <script setup lang="tsx">
-import { ref, onMounted } from "vue"
+import { ref, onMounted, reactive, watch } from "vue"
 
-const configList = ref<string[]>([])
+interface config {
+  jobList: string[]
+  companyList: string[]
+  hrList: string[]
+  salaryMin: string
+  salaryMax: string
+  id: string
+}
+
+const configList = ref<config[]>([])
+const state = reactive({
+  indeterminate: true,
+  checkAll: false,
+  checkedList: [],
+})
+const plainOptions = ['Boss', '拉勾', '智联']
 
 const init = () => {
   const configition = window.localStorage.getItem("DELIVERY_CONFIGITION")
@@ -46,27 +68,32 @@ const init = () => {
   }
 }
 
+const onCheckAllChange = (e: any) => {
+  Object.assign(state, {
+    checkedList: e.target.checked ? plainOptions : [],
+    indeterminate: false,
+  });
+};
+watch(
+  () => state.checkedList,
+  val => {
+    state.indeterminate = !!val.length && val.length < plainOptions.length;
+    state.checkAll = val.length === plainOptions.length;
+  },
+);
+
 onMounted(() => {
   init()
 })
 
 </script>
-<style scoped>
+<style scoped lang="less">
 .home-screen {
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 100vh;
   padding: 20px;
-}
-.form-container {
-  width: 350px;
-  height: 500px;
-  background-color: #fff;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  border-radius: 10px;
-  box-sizing: border-box;
-  padding: 20px 30px;
 }
 
 .card {
@@ -81,59 +108,47 @@ onMounted(() => {
   background: #f1f1f3;
   box-shadow: 0px 8px 16px 0px rgb(0 0 0 / 3%);
   position: relative;
+
+  &-title {
+    padding: 0;
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin: 0;
+  }
+
+  &-content {
+    color: var(--secondary-color);
+    font-size: 0.86rem;
+  }
+
+  &-arrow {
+    position: absolute;
+    background: var(--primary-color);
+    padding: 0.4rem;
+    border-top-left-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+    bottom: 0;
+    right: 0;
+    transition: 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+  }
+
+  &:hover {
+    &-title {
+      color: var(--primary-color);
+      text-decoration: underline;
+    }
+    &-arrow {
+      background: #111;
+    }
+  }
 }
 
 .card > * + * {
   margin-top: 1.1em;
 }
 
-.card .card__content {
-  color: var(--secondary-color);
-  font-size: 0.86rem;
-}
-
-.card .card__title {
-  padding: 0;
-  font-size: 1.3rem;
-  font-weight: bold;
-  margin: 0;
-}
-
-.card .card__date {
-  color: #6e6b80;
-  font-size: 0.8rem;
-}
-
-.card .card__arrow {
-  position: absolute;
-  background: var(--primary-color);
-  padding: 0.4rem;
-  border-top-left-radius: var(--border-radius);
-  border-bottom-right-radius: var(--border-radius);
-  bottom: 0;
-  right: 0;
-  transition: 0.2s;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #fff;
-}
-
-.card svg {
-  transition: 0.2s;
-}
-
-/* hover */
-.card:hover .card__title {
-  color: var(--primary-color);
-  text-decoration: underline;
-}
-
-.card:hover .card__arrow {
-  background: #111;
-}
-
-.card:hover .card__arrow svg {
-  transform: translateX(3px);
-}
 </style>

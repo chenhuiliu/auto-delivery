@@ -1,11 +1,52 @@
 <script setup lang="tsx">
 import { useRouter } from 'vue-router'
+import { message } from "ant-design-vue"
 
 const router = useRouter()
 
 const handleRoute = (path: string): void => {
   router.push(path)
 }
+
+const login = () => {
+  const data = {
+    email: "123456@qq.com",
+    password: "123456"
+  }
+  const dataJson = JSON.stringify(data)
+
+  fetch('https://apifoxmock.com/m1/4160691-3800034-default/api/login', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: dataJson
+  })
+  .then(response => {
+    if (response.ok) {
+      console.log(response.json(), "response")
+      return response.json();
+    } else {
+      message.error("登录失败")
+    }
+  })
+  .then(data => {
+    if (data) {
+      const configition = window.localStorage.getItem("DELIVERY_CONFIGITION")
+      if (configition) {
+        handleRoute('/home')
+      } else {
+        handleRoute('/config')
+      }
+      window.localStorage.setItem("USER__INFO__", JSON.stringify(data))
+    }
+  })
+  .catch(error => {
+    message.error(error)
+    console.error('Error:', error);
+  })
+}
+
 
 </script>
 <template>
@@ -18,7 +59,7 @@ const handleRoute = (path: string): void => {
         <p class="page-link">
           <span class="page-link-label">Forgot Password?</span>
         </p>
-        <button class="form-btn" @click="handleRoute('/config')">Log in</button>
+        <button class="form-btn" @click="login()">Log in</button>
       </form>
       <p class="sign-up-label">
         Don't have an account?<span class="sign-up-link" @click="handleRoute('/sign_up')">Sign up</span>
