@@ -5,7 +5,9 @@ import {
   Select,
   Button,
   Tag,
-  InputNumber
+  InputNumber,
+  Tooltip,
+  Radio
 } from "ant-design-vue"
 import type { App } from "vue"
 export function setupAntd(app: App<Element>) {
@@ -17,4 +19,6 @@ export function setupAntd(app: App<Element>) {
     .use(Button)
     .use(Tag)
     .use(InputNumber)
+    .use(Tooltip)
+    .use(Radio)
 }

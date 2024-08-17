@@ -1,8 +1,9 @@
 <template>
   <div class="home-screen">
-    <div class="home-content">
+    <div class="home-content" v-if="configList.length">
       <div class="home-content-header">
         <div class="header-left">
+          <div class="header-left-title">请选择投递平台</div>
           <a-checkbox
             v-model:checked="state.checkAll"
             :indeterminate="state.indeterminate"
@@ -10,39 +11,72 @@
           >
             全选
           </a-checkbox>
-          <a-checkbox-group v-model:value="state.checkedList" :options="plainOptions" />
+          <a-checkbox-group v-model:value="state.checkedList" :options="plainOptions">
+            <template #label="{ label }">
+              <span>{{ configTitleMap[label] }}</span>
+            </template>
+          </a-checkbox-group>
         </div>
         <div class="header-right">
           <a-button type="primary">投递</a-button>
         </div>
       </div>
-      <div class="card" v-for="(config, index) in configList" :key="index">
-        <h3 class="card-title">{{ config.id }}</h3>
-        <div class="card-content">
-          <p class="card-content-item">
-            <span>投递职位:</span>
-            <span v-for="(item, index) in config.jobList" :key="index">{{ item }}</span>
-          </p>
-          <p class="card-content-item">
-            薪资: {{ config.salaryMin }} - {{ config.
-            salaryMax }}
-          </p>
-          <p class="card-content-item">
-            <span>屏蔽公司:</span>
-            <span v-for="(item, index) in config.companyList" :key="index">{{ item }}</span>
-          </p>
-          <p class="card-content-item">
-            <span>屏蔽HR: </span>
-            <span v-for="(item, index) in config.hrList" :key="index">{{ item }}</span>
-          </p>
-        </div>
-        <div class="card__arrow">编辑</div>
+      <div class="home-content-header">
+        <PlatFormSelect />
       </div>
+      <div class="card-container">
+        <div class="card" v-for="(config, index) in configList" :key="index">
+          <div class="card-header">
+            <h4 class="card-header-title">{{ configTitleMap[config.id] || "来来来" }}</h4>
+            <a-tooltip placement="top">
+              <template #title>
+                <span>编辑</span>
+              </template>
+              <EditTwoTone @click="goConfig(config.id)" />
+            </a-tooltip>
+          </div>
+          <div class="card-content">
+            <div class="card-content-item">
+              <span class="card-content-label">投递职位:</span>
+              <div class="card-content-tags">
+                <a-tag v-for="(item, index) in config.jobList" :key="index" color="cyan">{{ item }}</a-tag>
+              </div>
+            </div>
+            <div class="card-content-item">
+              <span class="card-content-label">期望薪资:</span>
+              <div>
+                {{ config.salaryMin }} - {{ config.
+                salaryMax }}k
+              </div>
+            </div>
+            <div class="card-content-item">
+              <span  class="card-content-label">屏蔽公司:</span>
+              <div class="card-content-tags">
+                <a-tag v-for="(item, index) in config.companyList" :key="index" color="cyan">{{ item }}</a-tag>
+              </div>
+            </div>
+            <div class="card-content-item">
+              <span  class="card-content-label">屏蔽HR: </span>
+              <div class="card-content-tags">
+                <a-tag v-for="(item, index) in config.hrList" :key="index" color="cyan">{{ item }}</a-tag>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="home-content-empty" v-else>
+      <PlatFormSelect />
     </div>
   </div>
 </template>
 <script setup lang="tsx">
 import { ref, onMounted, reactive, watch } from "vue"
+import { EditTwoTone } from "@ant-design/icons-vue"
+import { useRouter } from 'vue-router'
+import PlatFormSelect from "@/components/platformSelect.vue"
+
+const router = useRouter()
 
 interface config {
   jobList: string[]
@@ -59,7 +93,12 @@ const state = reactive({
   checkAll: false,
   checkedList: [],
 })
-const plainOptions = ['Boss', '拉勾', '智联']
+const plainOptions = ['boss', 'lagou', 'zhilian']
+const configTitleMap = {
+  "boss": "Boss",
+  "lagou": "拉勾",
+  "zhilian": "智联"
+}
 
 const init = () => {
   const configition = window.localStorage.getItem("DELIVERY_CONFIGITION")
@@ -74,6 +113,12 @@ const onCheckAllChange = (e: any) => {
     indeterminate: false,
   });
 };
+
+const goConfig = (type: string) => {
+  const path = `/config?type=${type}`
+  router.push(path)
+}
+
 watch(
   () => state.checkedList,
   val => {
@@ -93,7 +138,45 @@ onMounted(() => {
   align-items: center;
   justify-content: space-between;
   height: 100vh;
-  padding: 20px;
+}
+.home-content {
+  width: 80%;
+  margin: auto;
+  --border-radius: 0.75rem;
+  --primary-color: #7257fa;
+  --secondary-color: #3c3852;
+  font-family: "Arial";
+  padding: 1rem;
+  cursor: pointer;
+  border-radius: var(--border-radius);
+  background: #f1f1f3;
+  box-shadow: 0px 8px 16px 0px rgb(0 0 0 / 3%);
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+
+    .header-left {
+      &-title {
+        margin-bottom: 6px;
+      }
+    }
+  }
+}
+
+.home-content-empty {
+  width: 40%;
+  --border-radius: 0.75rem;
+  margin: auto;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  background: #f1f1f3;
+  box-shadow: 0px 8px 16px 0px rgb(0 0 0 / 3%);
+}
+
+.card-container {
+  display: flex;
 }
 
 .card {
@@ -105,44 +188,42 @@ onMounted(() => {
   padding: 1rem;
   cursor: pointer;
   border-radius: var(--border-radius);
-  background: #f1f1f3;
+  background: #fff;
   box-shadow: 0px 8px 16px 0px rgb(0 0 0 / 3%);
   position: relative;
+  margin-top: 40px;
+  margin-right: 20px;
 
-  &-title {
-    padding: 0;
-    font-size: 1.3rem;
-    font-weight: bold;
-    margin: 0;
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &-title {
+      padding: 0;
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin: 0;
+    }
   }
+
 
   &-content {
     color: var(--secondary-color);
     font-size: 0.86rem;
-  }
-
-  &-arrow {
-    position: absolute;
-    background: var(--primary-color);
-    padding: 0.4rem;
-    border-top-left-radius: var(--border-radius);
-    border-bottom-right-radius: var(--border-radius);
-    bottom: 0;
-    right: 0;
-    transition: 0.2s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #fff;
-  }
-
-  &:hover {
-    &-title {
-      color: var(--primary-color);
-      text-decoration: underline;
+    &-item {
+      display: flex;
+      margin-bottom: 10px;
     }
-    &-arrow {
-      background: #111;
+    &-label {
+      margin: 0 10px 0 0;
+      min-width: 65px;
+      text-align: right;
+    }
+    &-tags {
+      .ant-tag {
+        margin-bottom: 4px;
+      }
     }
   }
 }

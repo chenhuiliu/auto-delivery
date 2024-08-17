@@ -1,16 +1,16 @@
 <template>
   <div class="config-screen">
     <div class="form-container">
-      <p class="title">{{ deliveryType }}招聘配置</p>
+      <p class="title">{{ plainOptionsMap[deliveryType] }}招聘配置</p>
       <a-form class="form" :model="formState" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
         <a-form-item label="职位名称" name="jobName">
           <a-input-group compact style="width: 400px">
             <a-input v-model:value="jobName" style="width: calc(100% - 200px)" placeholder="请输入需要投递的职位名称" @press-enter="submitJob" />
             <a-button type="primary" @click="submitJob">提交</a-button>
           </a-input-group>
-          <div v-if="formState.jobList.length > 0" class="filter-list">
-            <a-tag v-for="(job, index) in formState.jobList" :key="index" closable>{{ job }}</a-tag>
-          </div>
+        </a-form-item>
+        <a-form-item label="已选职位" v-if="formState.jobList.length > 0">
+          <a-tag v-for="(job, index) in formState.jobList" :key="index" color="cyan" closable>{{ job }}</a-tag>
         </a-form-item>
 
         <a-form-item label="薪资范围" name="salaryRange">
@@ -39,9 +39,10 @@
             <a-input v-model:value="companyName" style="width: calc(100% - 200px)" placeholder="请输入需要屏蔽的公司" @press-enter="submitCompany" />
             <a-button type="primary" @click="submitCompany">提交</a-button>
           </a-input-group>
-          <div v-if="formState.companyList.length > 0" class="filter-list">
-            <a-tag v-for="(company, index) in formState.companyList" :key="index" closable>{{ company }}</a-tag>
-          </div>
+        </a-form-item>
+
+        <a-form-item label="已屏蔽公司" v-if="formState.companyList.length > 0">
+          <a-tag v-for="(company, index) in formState.companyList" :key="index" color="red" closable>{{ company }}</a-tag>
         </a-form-item>
 
         <a-form-item label="屏蔽HR" name="shieldHR">
@@ -49,9 +50,10 @@
             <a-input v-model:value="hrName" style="width: calc(100% - 200px)" placeholder="请输入需要屏蔽的HR" @press-enter="submitHR" />
             <a-button type="primary" @click="submitHR">提交</a-button>
           </a-input-group>
-          <div v-if="formState.hrList.length > 0" class="filter-list">
-            <a-tag v-for="(hr, index) in formState.hrList" :key="index" closable>{{ hr }}</a-tag>
-          </div>
+        </a-form-item>
+
+        <a-form-item label="已屏蔽HR" v-if="formState.hrList.length > 0">
+          <a-tag v-for="(hr, index) in formState.hrList" :key="index" color="red" closable>{{ hr }}</a-tag>
         </a-form-item>
 
         <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
@@ -64,7 +66,7 @@
 </template>
 <script setup lang="tsx">
 import { message } from "ant-design-vue";
-import { ref, reactive } from "vue"
+import { ref, reactive, onMounted } from "vue"
 import { useRouter } from 'vue-router'
 import { useRoute } from "vue-router"
 
@@ -74,7 +76,14 @@ const route = useRoute()
 const jobName = ref("")
 const companyName = ref("")
 const hrName = ref("")
-const deliveryType = route.query.type
+const deliveryType = (route.query.type || "boss") as string
+console.log(deliveryType, "deliveryType")
+
+const plainOptionsMap = {
+  "boss": "Boss",
+  "lagou": "拉勾",
+  "zhilian": "智联"
+} as Record<string, string>
 
 interface FormState {
   jobList: string[];
@@ -84,7 +93,7 @@ interface FormState {
   salaryMax: string;
 }
 
-const formState = reactive<FormState>({
+let formState = reactive<FormState>({
   jobList: [],
   companyList: [],
   hrList: [],
@@ -132,7 +141,7 @@ const onSubmit = () => {
   if (configition) {
     const list = JSON.parse(configition)
     const index = list.findIndex((item) => item.id === deliveryType)
-    if (index === 1) {
+    if (index === -1) {
       list.push(data)
     } else {
       list[index] = data
@@ -147,6 +156,19 @@ const onSubmit = () => {
 const onCancel = () => {
   router.push("/home")
 }
+
+onMounted(() => {
+  const configition = window.localStorage.getItem("DELIVERY_CONFIGITION")
+  if (configition) {
+    const list = JSON.parse(configition)
+    const index = list.findIndex((item) => item.id === deliveryType)
+    if (index !== -1) {
+      const newState = JSON.parse(JSON.stringify(list[index]));
+      Object.assign(formState, newState)
+      console.log(formState, "formState")
+    }
+  }
+})
 
 </script>
 <style scoped lang="less">
@@ -164,20 +186,8 @@ const onCancel = () => {
   box-sizing: border-box;
   padding: 20px 30px;
 }
-
-.form {
-  .filter-list {
-    margin: 10px 0;
-  }
+.ant-form-item-control .ant-tag {
+  margin-bottom: 4px;
 }
 
-.salary {
-  outline: 0 !important;
-  box-sizing: border-box;
-  margin-right: 10px;
-}
-
-.salary:focus {
-  border-color: teal;
-}
 </style>
