@@ -32,6 +32,7 @@
               style="width: 100px; text-align: center"
               placeholder="最高薪资"
             />
+            <span class="salary-unit">k</span>
           </a-input-group>
         </a-form-item>
         <a-form-item label="屏蔽公司" name="shieldCompany">
@@ -56,6 +57,17 @@
           <a-tag v-for="(hr, index) in formState.hrList" :key="index" color="red" closable>{{ hr }}</a-tag>
         </a-form-item>
 
+        <a-form-item label="屏蔽猎头" name="shieldHeadhunter">
+          <a-input-group compact style="width: 400px">
+            <a-input v-model:value="headhunter" style="width: calc(100% - 200px)" placeholder="请输入需要屏蔽的猎头" @press-enter="submitHeadhunter" />
+            <a-button type="primary" @click="submitHeadhunter">提交</a-button>
+          </a-input-group>
+        </a-form-item>
+
+        <a-form-item label="已屏蔽猎头" v-if="formState.headhunterList.length > 0">
+          <a-tag v-for="(headhunter, index) in formState.headhunterList" :key="index" color="red" closable>{{ headhunter }}</a-tag>
+        </a-form-item>
+
         <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
           <a-button style="margin-right: 10px" @click="onCancel">取消</a-button>
           <a-button type="primary" @click="onSubmit" @enter="onSubmit">提交</a-button>
@@ -76,19 +88,20 @@ const route = useRoute()
 const jobName = ref("")
 const companyName = ref("")
 const hrName = ref("")
+const headhunter = ref("")
 const deliveryType = (route.query.type || "boss") as string
-console.log(deliveryType, "deliveryType")
 
 const plainOptionsMap = {
-  "boss": "Boss",
-  "lagou": "拉勾",
-  "zhilian": "智联"
+  "boss": "Boss直聘",
+  "lagou": "拉勾网",
+  "zhilian": "智联招聘"
 } as Record<string, string>
 
 interface FormState {
   jobList: string[];
   companyList: string[];
   hrList: string[];
+  headhunterList: string[];
   salaryMin: string;
   salaryMax: string;
 }
@@ -97,6 +110,7 @@ let formState = reactive<FormState>({
   jobList: [],
   companyList: [],
   hrList: [],
+  headhunterList: [],
   salaryMin: "",
   salaryMax: ""
 });
@@ -128,6 +142,15 @@ const submitHR = () => {
     hrName.value = ""
   } else {
     message.error("该HR已存在")
+  }
+}
+const submitHeadhunter = () => {
+  const index = formState.headhunterList.findIndex((hd) => hd === headhunter.value)
+  if (index === -1) {
+    formState.headhunterList.push(headhunter.value)
+    headhunter.value = ""
+  } else {
+    message.error("该猎头已存在")
   }
 }
 
@@ -188,6 +211,10 @@ onMounted(() => {
 }
 .ant-form-item-control .ant-tag {
   margin-bottom: 4px;
+}
+.salary-unit {
+  padding-left: 6px;
+  line-height: 2.2;
 }
 
 </style>

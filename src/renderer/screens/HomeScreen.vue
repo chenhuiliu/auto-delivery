@@ -18,7 +18,7 @@
           </a-checkbox-group>
         </div>
         <div class="header-right">
-          <a-button type="primary">投递</a-button>
+          <a-button type="primary" @click="goDelivery">投递</a-button>
         </div>
       </div>
       <div class="home-content-header">
@@ -49,16 +49,22 @@
                 salaryMax }}k
               </div>
             </div>
-            <div class="card-content-item">
+            <div class="card-content-item" v-if="config.companyList && config.companyList.length">
               <span  class="card-content-label">屏蔽公司:</span>
               <div class="card-content-tags">
                 <a-tag v-for="(item, index) in config.companyList" :key="index" color="cyan">{{ item }}</a-tag>
               </div>
             </div>
-            <div class="card-content-item">
+            <div class="card-content-item" v-if="config.hrList && config.hrList.length">
               <span  class="card-content-label">屏蔽HR: </span>
               <div class="card-content-tags">
                 <a-tag v-for="(item, index) in config.hrList" :key="index" color="cyan">{{ item }}</a-tag>
+              </div>
+            </div>
+            <div class="card-content-item" v-if="config.headhunterList && config.headhunterList.length">
+              <span  class="card-content-label">屏蔽猎头: </span>
+              <div class="card-content-tags">
+                <a-tag v-for="(item, index) in config.headhunterList" :key="index" color="cyan">{{ item }}</a-tag>
               </div>
             </div>
           </div>
@@ -82,6 +88,7 @@ interface config {
   jobList: string[]
   companyList: string[]
   hrList: string[]
+  headhunterList: string[]
   salaryMin: string
   salaryMax: string
   id: string
@@ -95,9 +102,9 @@ const state = reactive({
 })
 const plainOptions = ['boss', 'lagou', 'zhilian']
 const configTitleMap = {
-  "boss": "Boss",
-  "lagou": "拉勾",
-  "zhilian": "智联"
+  "boss": "Boss直聘",
+  "lagou": "拉勾网",
+  "zhilian": "智联招聘"
 }
 
 const init = () => {
@@ -117,6 +124,10 @@ const onCheckAllChange = (e: any) => {
 const goConfig = (type: string) => {
   const path = `/config?type=${type}`
   router.push(path)
+}
+
+const goDelivery = () => {
+  router.push('/record')
 }
 
 watch(
@@ -145,9 +156,7 @@ onMounted(() => {
   --border-radius: 0.75rem;
   --primary-color: #7257fa;
   --secondary-color: #3c3852;
-  font-family: "Arial";
-  padding: 1rem;
-  cursor: pointer;
+  padding: 20px;
   border-radius: var(--border-radius);
   background: #f1f1f3;
   box-shadow: 0px 8px 16px 0px rgb(0 0 0 / 3%);
@@ -155,21 +164,24 @@ onMounted(() => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 14px;
+    background: #dfdfee;
+    border-radius: 6px;
+    padding: 10px;
 
     .header-left {
       &-title {
-        margin-bottom: 6px;
+        margin-bottom: 10px;
       }
     }
   }
 }
 
 .home-content-empty {
-  width: 40%;
+  width: 60%;
   --border-radius: 0.75rem;
   margin: auto;
-  padding: 1rem;
+  padding: 14px;
   border-radius: var(--border-radius);
   background: #f1f1f3;
   box-shadow: 0px 8px 16px 0px rgb(0 0 0 / 3%);
@@ -183,10 +195,10 @@ onMounted(() => {
   --border-radius: 0.75rem;
   --primary-color: #7257fa;
   --secondary-color: #3c3852;
-  width: 210px;
-  font-family: "Arial";
-  padding: 1rem;
-  cursor: pointer;
+  min-width: 210px;
+  max-width: 300px;
+  flex: 1;
+  padding: 14px;
   border-radius: var(--border-radius);
   background: #fff;
   box-shadow: 0px 8px 16px 0px rgb(0 0 0 / 3%);
@@ -210,7 +222,10 @@ onMounted(() => {
 
   &-content {
     color: var(--secondary-color);
-    font-size: 0.86rem;
+    font-size: 14px;
+    max-height: 400px;
+    overflow: auto;
+    margin-right: -12px;
     &-item {
       display: flex;
       margin-bottom: 10px;

@@ -20,9 +20,9 @@ const router = useRouter()
 const plainOptions = ['boss', 'lagou', 'zhilian']
 const typeVal = ref("boss")
 const configTitleMap = {
-  "boss": "Boss",
-  "lagou": "拉勾",
-  "zhilian": "智联"
+  "boss": "Boss直聘",
+  "lagou": "拉勾网",
+  "zhilian": "智联招聘"
 }
 
 const goConfig = (type: string) => {
