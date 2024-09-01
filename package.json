@@ -40,7 +40,7 @@
     "@mdi/font": "^7.4.47",
     "ant-design-vue": "4.x",
     "pinia": "^2.2.1",
-    "vue": "^3.4.36",
+    "vue": "^3.4.38",
     "vue-i18n": "^9.13.1",
     "vue-router": "^4.4.3",
     "vuetify": "^3.6.14"
