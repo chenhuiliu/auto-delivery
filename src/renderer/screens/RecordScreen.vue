@@ -8,8 +8,9 @@
   </div>
 </template>
 <script setup lang="tsx">
-import { ref } from "vue"
+import { ref, onMounted } from "vue"
 import RecordList from "@/components/RecordList.vue"
+import { getDeliveryList } from "@/renderer/api/index.js"
 
 const activeKey = ref('boss')
 const tabList = ref([
@@ -26,7 +27,7 @@ const tabList = ref([
     value: "zhilian"
   }
 ])
-const recordList = [{
+const recordList = ref([{
   id: "1",
   link: "https://www.lagou.com/jobs/123456",
   time: "2021-01-01 12:00:00",
@@ -49,7 +50,15 @@ const recordList = [{
   position: "前端架构师",
   remark: "拉勾网",
   type: "boss"
-}]
+}])
+
+onMounted(() => {
+  getDeliveryList().then(res => {
+    if (res.code == 200) {
+      recordList.value = res.data
+    }
+  })
+})
 
 </script>
 <style scoped lang="less">

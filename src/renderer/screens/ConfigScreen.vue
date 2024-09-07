@@ -81,6 +81,7 @@ import { message } from "ant-design-vue";
 import { ref, reactive, onMounted } from "vue"
 import { useRouter } from 'vue-router'
 import { useRoute } from "vue-router"
+import { addConfig } from "@/renderer/api/index.js"
 
 const router = useRouter()
 const route = useRoute()
@@ -159,6 +160,12 @@ const onSubmit = () => {
     ...formState,
     id: deliveryType
   }
+  addConfig(data).then((res) => {
+    if (res.code !== 200) {
+      router.push("/home")
+      message.success("保存成功")
+    }
+  })
   const configition = window.localStorage.getItem("DELIVERY_CONFIGITION")
 
   if (configition) {

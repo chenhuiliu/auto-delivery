@@ -1,6 +1,6 @@
 <script setup lang="tsx">
 import { useRouter } from 'vue-router'
-import { message } from "ant-design-vue"
+import { register } from "@/renderer/api/index.js"
 
 const router = useRouter()
 
@@ -14,31 +14,11 @@ const signUp = () => {
     password: "123456",
     confirmPassword: "123456"
   }
-  const dataJson = JSON.stringify(data)
 
-  fetch('https://apifoxmock.com/m1/4160691-3800034-default/api/login', {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: dataJson
-  })
-  .then(response => {
-    if (response.ok) {
-      console.log(response.json(), "response")
-      return response.json();
-    } else {
-      message.error("注册失败")
-    }
-  })
-  .then(data => {
-    if (data) {
+  register(data).then(res => {
+    if (res.code === 200) {
       handleRoute('/login')
     }
-  })
-  .catch(error => {
-    message.error(error)
-    console.error('Error:', error);
   })
 }
 

@@ -81,6 +81,7 @@ import { ref, onMounted, reactive, watch } from "vue"
 import { EditTwoTone } from "@ant-design/icons-vue"
 import { useRouter } from 'vue-router'
 import PlatFormSelect from "@/components/platformSelect.vue"
+import { getConfigList } from "@/renderer/api/index.js"
 
 const router = useRouter()
 
@@ -108,6 +109,9 @@ const configTitleMap = {
 }
 
 const init = () => {
+  getConfigList().then((res: any) => {
+    configList.value = res.data
+  })
   const configition = window.localStorage.getItem("DELIVERY_CONFIGITION")
   if (configition) {
     configList.value = JSON.parse(configition)
