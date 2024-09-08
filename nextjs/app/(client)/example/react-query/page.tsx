@@ -1,7 +1,6 @@
-import Loading from '@components/ui/loading';
-import { Suspense } from 'react';
+import { Suspense } from "react";
 
-import WaitingComponent from './components/wating-component';
+import WaitingComponent from "./components/wating-component";
 
 export const revalidate = 0;
 
@@ -9,6 +8,7 @@ export default function ReactQueryExample() {
   return (
     <main>
       <ul>
+        000-----
         <Suspense fallback={<div>waiting 100....</div>}>
           <WaitingComponent wait={100} />
         </Suspense>
@@ -31,14 +31,6 @@ export default function ReactQueryExample() {
           <WaitingComponent wait={700} />
         </Suspense>
       </ul>
-
-      <div className="flex-col items-center justify-center border p-2">
-        <Suspense fallback={<Loading />}>
-          <WaitingComponent wait={800} />
-          <WaitingComponent wait={900} />
-          <WaitingComponent wait={1000} />
-        </Suspense>
-      </div>
     </main>
   );
 }

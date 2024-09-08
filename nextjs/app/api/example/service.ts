@@ -1,5 +1,5 @@
-import dbConnect from 'app/server/db-connect';
-import type { IExample } from 'app/server/example/interfaces';
+import dbConnect from 'app/api/db-connect';
+import type { IExample } from 'app/api/example/interfaces';
 
 import Example from './model';
 

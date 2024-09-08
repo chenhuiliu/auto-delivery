@@ -1,4 +1,4 @@
-import type { IExample } from 'app/server/example/interfaces';
+import type { IExample } from 'app/api/example/interfaces';
 import type { Model } from 'mongoose';
 import mongoose, { model } from 'mongoose';
 

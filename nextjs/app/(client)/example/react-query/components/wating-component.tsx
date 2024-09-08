@@ -1,30 +1,14 @@
-'use client';
+"use client";
 
-import { useSuspenseQuery } from '@tanstack/react-query';
-
-function getBaseURL() {
-  if (typeof window !== 'undefined') {
-    return '';
-  }
-  if (process.env.VERCEL_URL) {
-    return `https://${process.env.VERCEL_URL}`;
-  }
-  return 'http://localhost:3000';
-}
-const baseUrl = getBaseURL();
+import { useQuery } from "@tanstack/react-query";
+import { http } from "src/request/https";
 
 function useWaitQuery(props: { wait: number }) {
-  const query = useSuspenseQuery({
-    queryKey: ['wait', props.wait],
+  const query = useQuery({
+    queryKey: ["wait", props.wait],
     queryFn: async () => {
-      const url = `${baseUrl}/server/example?wait=${props.wait}`;
-
-      const res: string = await (
-        await fetch(url, {
-          cache: 'no-store',
-        })
-      ).json();
-      return res;
+      const res = await http.get(`/api/example?wait=${props.wait}`);
+      return res?.data;
     },
   });
 
