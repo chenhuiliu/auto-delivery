@@ -1,10 +1,12 @@
+'use client'
+
 import { Avatar } from '@/components/Avatar';
 import { Button, ButtonLink } from '@/components/Button';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import { fetcher } from '@/lib/fetch';
 import { useCurrentUser } from '@/lib/user';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import Container from './Container';
@@ -71,11 +73,11 @@ const UserMenu = ({ user, mutate }) => {
       >
         {visible && (
           <div className={styles.menu}>
-            <Link passHref href={`/user/${user.username}`}>
-              <a className={styles.item}>Profile</a>
+            <Link passHref href={`/user/${user.username}`} className={styles.item}>
+              Profile
             </Link>
-            <Link passHref href="/settings">
-              <a className={styles.item}>Settngs</a>
+            <Link className={styles.item} passHref href="/settings">
+              Setting
             </Link>
             <div className={styles.item} style={{ cursor: 'auto' }}>
               <Container alignItems="center">
@@ -105,8 +107,8 @@ const Nav = () => {
           alignItems="center"
           justifyContent="space-between"
         >
-          <Link href="/">
-            <a className={styles.logo}>Next.js MongoDB App</a>
+          <Link href="/" className={styles.logo}>
+            Next.js MongoDB App
           </Link>
           <Container>
             {user ? (
@@ -116,14 +118,14 @@ const Nav = () => {
             ) : (
               <>
                 <Link passHref href="/login">
-                  <ButtonLink
+                  <Button
                     size="small"
                     type="success"
                     variant="ghost"
                     color="link"
                   >
                     Log in
-                  </ButtonLink>
+                  </Button>
                 </Link>
                 <Spacer axis="horizontal" size={0.25} />
                 <Link passHref href="/sign-up">

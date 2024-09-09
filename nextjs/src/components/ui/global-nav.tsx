@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from "next/link";
 
 function GlobalNav() {
   return (
@@ -8,15 +8,11 @@ function GlobalNav() {
       </div>
 
       <div className="flex justify-end gap-x-2 text-gray-500">
-        <Link href="/example">Example</Link>
-        <a
-          className="ml-2 flex items-center gap-x-1"
-          href="https://github.com/bysxx/next-ts-template-tailwind"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <span>Source Code</span>
-        </a>
+        <Link href="/example" className="ml-2 flex items-center gap-x-1">
+          Example
+        </Link>
+
+        <span>Source Code</span>
       </div>
     </nav>
   );

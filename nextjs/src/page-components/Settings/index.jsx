@@ -1,3 +1,5 @@
+'use client'
+
 import { Avatar } from '@/components/Avatar';
 import { Button } from '@/components/Button';
 import { Input, Textarea } from '@/components/Input';
@@ -5,7 +7,7 @@ import { Container, Spacer } from '@/components/Layout';
 import Wrapper from '@/components/Layout/Wrapper';
 import { fetcher } from '@/lib/fetch';
 import { useCurrentUser } from '@/lib/user';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import styles from './Settings.module.css';

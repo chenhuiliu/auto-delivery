@@ -1,3 +1,4 @@
+'use client';
 import { useTheme } from 'next-themes';
 import { useCallback } from 'react';
 import styles from './ThemeSwitcher.module.css';

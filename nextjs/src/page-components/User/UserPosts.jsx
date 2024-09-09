@@ -23,10 +23,11 @@ const UserPosts = ({ user }) => {
           <Link
             key={post._id}
             href={`/user/${post.creator.username}/post/${post._id}`}
+            className={styles.wrap}
           >
-            <a className={styles.wrap}>
-              <Post className={styles.post} post={post} />
-            </a>
+
+            <Post className={styles.post} post={post} />
+
           </Link>
         ))}
         <Container justifyContent="center">

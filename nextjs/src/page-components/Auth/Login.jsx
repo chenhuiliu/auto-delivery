@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@/components/Button';
 import { ButtonLink } from '@/components/Button/Button';
 import { Input } from '@/components/Input';
@@ -6,7 +8,7 @@ import { TextLink } from '@/components/Text';
 import { fetcher } from '@/lib/fetch';
 import { useCurrentUser } from '@/lib/user';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import styles from './Auth.module.css';
