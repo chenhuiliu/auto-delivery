@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@/components/Button';
 import { ButtonLink } from '@/components/Button/Button';
 import { Input } from '@/components/Input';
@@ -71,11 +73,11 @@ const NewPassword = ({ token }) => {
         </>
       )}
       <Spacer size={0.25} axis="vertical" />
-      <Link href="/login" passHref>
-        <ButtonLink type="success" size="large" variant="ghost">
-          Return to login
-        </ButtonLink>
-      </Link>
+
+      <ButtonLink href="/login" type="success" size="large" variant="ghost">
+        Return to login
+      </ButtonLink>
+
     </div>
   );
 };
@@ -89,11 +91,11 @@ const BadLink = () => {
         window and try again.
       </p>
       <Spacer size={1} />
-      <Link href="/login" passHref>
-        <ButtonLink type="success" size="large" variant="ghost">
-          Return to login
-        </ButtonLink>
-      </Link>
+
+      <ButtonLink href="/login" type="success" size="large" variant="ghost">
+        Return to login
+      </ButtonLink>
+
     </div>
   );
 };

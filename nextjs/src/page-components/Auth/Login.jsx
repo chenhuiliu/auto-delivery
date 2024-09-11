@@ -85,19 +85,19 @@ const Login = () => {
             Log in
           </Button>
           <Spacer size={0.25} axis="vertical" />
-          <Link href="/forget-password" passHref>
-            <ButtonLink type="success" size="large" variant="ghost">
-              Forget password
-            </ButtonLink>
-          </Link>
+
+          <ButtonLink href="/forget-password" type="success" size="large" variant="ghost">
+            Forget password
+          </ButtonLink>
+
         </form>
       </div>
       <div className={styles.footer}>
-        <Link href="/sign-up" passHref>
-          <TextLink color="link" variant="highlight">
-            Don&apos;t have an account? Sign Up
-          </TextLink>
-        </Link>
+
+        <TextLink color="link" href="/sign-up" variant="highlight">
+          Don&apos;t have an account? Sign Up
+        </TextLink>
+
       </div>
     </Wrapper>
   );

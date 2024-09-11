@@ -21,12 +21,15 @@
     "test": "jest"
   },
   "dependencies": {
+    "@lukeed/ms": "^2.0.2",
     "@tanstack/react-query": "^5.29.2",
     "@tanstack/react-query-devtools": "^5.29.2",
     "@tanstack/react-query-next-experimental": "^5.29.2",
     "axios": "^1.7.7",
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
+    "express-rate-limit": "^7.4.0",
+    "limiter": "^2.1.0",
     "mongoose": "^8.3.1",
     "next": "^14.2.5",
     "next-themes": "^0.3.0",

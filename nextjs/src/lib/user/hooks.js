@@ -2,9 +2,11 @@ import { fetcher } from '@/lib/fetch';
 import useSWR from 'swr';
 
 export function useCurrentUser() {
-  return useSWR('/api/user', fetcher);
+  // debugger
+  return useSWR('/api/users', fetcher);
 }
 
 export function useUser(id) {
+  // debugger
   return useSWR(`/api/users/${id}`, fetcher);
 }

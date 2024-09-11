@@ -5,7 +5,6 @@ import { Input } from '@/components/Input';
 import { Container, Spacer, Wrapper } from '@/components/Layout';
 import { TextLink } from '@/components/Text';
 import { fetcher } from '@/lib/fetch';
-import { useCurrentUser } from '@/lib/user';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useRef, useState } from 'react';
@@ -18,7 +17,6 @@ const SignUp = () => {
   const usernameRef = useRef();
   const nameRef = useRef();
 
-  const { mutate } = useCurrentUser();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -29,26 +27,31 @@ const SignUp = () => {
       e.preventDefault();
       try {
         setIsLoading(true);
-        const response = await fetcher('/api/users', {
+        fetcher('/api/users/sign', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             email: emailRef.current.value,
-            name: nameRef.current.value,
             password: passwordRef.current.value,
             username: usernameRef.current.value,
           }),
+        }).then((response) => {
+          console.log(response);
+          // router.replace('/feed');
+        }).error(err => {
+          console.log(err);
         });
-        mutate({ user: response.user }, false);
-        toast.success('Your account has been created');
-        router.replace('/feed');
+        // mutate({ user: response.user }, false);
+        // toast.success('Your account has been created');
+
       } catch (e) {
         toast.error(e.message);
       } finally {
         setIsLoading(false);
       }
+      return false;
     },
-    [mutate, router]
+    [router]
   );
 
   return (
@@ -92,15 +95,6 @@ const SignUp = () => {
             size="large"
             required
           />
-          <Spacer size={0.5} axis="vertical" />
-          <Input
-            ref={nameRef}
-            autoComplete="name"
-            placeholder="Your name"
-            ariaLabel="Your name"
-            size="large"
-            required
-          />
           <Spacer size={1} axis="vertical" />
           <Button
             htmlType="submit"
@@ -114,11 +108,9 @@ const SignUp = () => {
         </form>
       </div>
       <div className={styles.footer}>
-        <Link href="/login" passHref>
-          <TextLink color="link" variant="highlight">
-            Already have an account? Log in
-          </TextLink>
-        </Link>
+        <TextLink href="/login" color="link" variant="highlight">
+          Already have an account? Log in
+        </TextLink>
       </div>
     </Wrapper>
   );

@@ -39,6 +39,7 @@
       "@stores/*": ["src/stores/*"],
       "@styles/*": ["src/styles/*"],
       "@/components/*": ["src/components/*"],
+      "@/page-components/*": ["src/page-components/*"],
       "@/lib/*": ["src/lib/*"],
       "@/": ["src/*"]
     },
@@ -48,6 +49,12 @@
       }
     ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "app/(client)/(main)/page.jsx"
+, "app/api/users/model.js", "middleware.js"  ],
   "exclude": ["./out/**/*", "./node_modules/**/*"]
 }
