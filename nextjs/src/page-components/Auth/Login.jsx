@@ -30,22 +30,22 @@ const Login = () => {
     async (event) => {
       setIsLoading(true);
       event.preventDefault();
-      try {
-        const response = await fetcher('/api/auth', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: emailRef.current.value,
-            password: passwordRef.current.value,
-          }),
-        });
-        mutate({ user: response.user }, false);
+
+      const response = await fetcher('/api/users/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: emailRef.current.value,
+          password: passwordRef.current.value,
+        }),
+      }).then((response) => {
         toast.success('You have been logged in.');
-      } catch (e) {
-        toast.error('Incorrect email or password.');
-      } finally {
+      }).catch((error) => {
+        toast.error(error.message);
+      }).finally(() => {
         setIsLoading(false);
-      }
+      });
+      // mutate({ user: response.user }, false);
     },
     [mutate]
   );

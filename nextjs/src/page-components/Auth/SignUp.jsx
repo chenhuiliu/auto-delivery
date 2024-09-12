@@ -25,30 +25,23 @@ const SignUp = () => {
   const onSubmit = useCallback(
     async (e) => {
       e.preventDefault();
-      try {
-        setIsLoading(true);
-        fetcher('/api/users/sign', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: emailRef.current.value,
-            password: passwordRef.current.value,
-            username: usernameRef.current.value,
-          }),
-        }).then((response) => {
-          console.log(response);
-          // router.replace('/feed');
-        }).error(err => {
-          console.log(err);
-        });
-        // mutate({ user: response.user }, false);
-        // toast.success('Your account has been created');
-
-      } catch (e) {
-        toast.error(e.message);
-      } finally {
+      setIsLoading(true);
+      fetcher('/api/users/sign', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: emailRef.current.value,
+          password: passwordRef.current.value,
+          username: usernameRef.current.value,
+        }),
+      }).then((response) => {
+        toast.success('用户创建成功！');
+        router.replace('/login');
+      }).catch((err) => {
+        toast.error(err.message);
+      }).finally(() => {
         setIsLoading(false);
-      }
+      })
       return false;
     },
     [router]
