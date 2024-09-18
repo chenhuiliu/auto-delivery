@@ -1,6 +1,6 @@
 import { findUserByEmail } from "../services";
 import { NextResponse } from "next/server";
-
+import signToken from './auth';
 import { RateLimiter } from "limiter";
 
 const limiter = new RateLimiter({ tokensPerInterval: 50, interval: "min", fireImmediately: true });
@@ -28,6 +28,8 @@ export async function POST(request, response, next) {
   if (user.password !== password) {
     return NextResponse.json({ error: { message: '邮箱密码错误。' } }, { status: 403 });
   }
-  return NextResponse.json({ success: true, message: '登陆成功。', });
+  let jwtToken = signToken({ email: user.email, id: user.id }, process.env.NEXT_PUBLIC_JWT_SECRET)
+
+  return NextResponse.json({ success: true, message: '登陆成功。', data: { token: jwtToken, } });
 
 }

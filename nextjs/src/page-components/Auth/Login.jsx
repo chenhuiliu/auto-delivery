@@ -31,7 +31,7 @@ const Login = () => {
       setIsLoading(true);
       event.preventDefault();
 
-      const response = await fetcher('/api/users/login', {
+      fetcher('/api/users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -39,6 +39,7 @@ const Login = () => {
           password: passwordRef.current.value,
         }),
       }).then((response) => {
+        window.sessionStorage.setItem('token', response.data.token);
         toast.success('You have been logged in.');
       }).catch((error) => {
         toast.error(error.message);
