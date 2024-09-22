@@ -1,6 +1,6 @@
 # .gitignore for Node.js Projects
 # ---------- Start of common ignore files
-
+.DS_Store
 # Node artifact files
 node_modules/
 /dist/*
