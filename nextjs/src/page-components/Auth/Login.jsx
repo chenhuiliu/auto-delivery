@@ -23,7 +23,7 @@ const Login = () => {
   const router = useRouter();
   useEffect(() => {
     if (isValidating) return;
-    if (user) router.replace('/feed');
+    if (user) router.replace('/home');
   }, [user, router, isValidating]);
 
   const onSubmit = useCallback(
@@ -39,8 +39,9 @@ const Login = () => {
           password: passwordRef.current.value,
         }),
       }).then((response) => {
-        window.sessionStorage.setItem('token', response.data.token);
+        window.localStorage.setItem('token', response.data.token);
         toast.success('You have been logged in.');
+        router.replace('/home');
       }).catch((error) => {
         toast.error(error.message);
       }).finally(() => {

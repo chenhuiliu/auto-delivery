@@ -7,7 +7,9 @@ const FeedPage = () => {
       <Head>
         <title>Feed</title>
       </Head>
-      <Feed />
+      <div>
+        home admin
+      </div>
     </>
   );
 };

@@ -20,13 +20,13 @@ const UserMenu = ({ user, mutate }) => {
 
   const [visible, setVisible] = useState(false);
 
-  const router = useRouter();
-  useEffect(() => {
-    const onRouteChangeComplete = () => setVisible(false);
-    router.events.on('routeChangeComplete', onRouteChangeComplete);
-    return () =>
-      router.events.off('routeChangeComplete', onRouteChangeComplete);
-  });
+  // const router = useRouter();
+  // useEffect(() => {
+  //   const onRouteChangeComplete = () => setVisible(false);
+  //   router.events.on('routeChangeComplete', onRouteChangeComplete);
+  //   return () =>
+  //     router.events.off('routeChangeComplete', onRouteChangeComplete);
+  // });
 
   useEffect(() => {
     // detect outside click to close menu
@@ -46,11 +46,12 @@ const UserMenu = ({ user, mutate }) => {
 
   const onSignOut = useCallback(async () => {
     try {
-      await fetcher('/api/auth', {
-        method: 'DELETE',
+      await fetcher('/api/auth/log-out', {
+        method: 'POST',
       });
       toast.success('You have been signed out');
       mutate({ user: null });
+      window.localStorage.removeItem('token');
     } catch (e) {
       toast.error(e.message);
     }
@@ -73,19 +74,19 @@ const UserMenu = ({ user, mutate }) => {
       >
         {visible && (
           <div className={styles.menu}>
-            <Link passHref href={`/user/${user.username}`} className={styles.item}>
-              Profile
+            <Link passHref href={`/home`} className={styles.item}>
+              Home
             </Link>
             <Link className={styles.item} passHref href="/settings">
               Setting
             </Link>
-            <div className={styles.item} style={{ cursor: 'auto' }}>
+            {/* <div className={styles.item} style={{ cursor: 'auto' }}>
               <Container alignItems="center">
                 <span>Theme</span>
                 <Spacer size={0.5} axis="horizontal" />
                 <ThemeSwitcher />
               </Container>
-            </div>
+            </div> */}
             <button onClick={onSignOut} className={styles.item}>
               Sign out
             </button>
@@ -98,6 +99,7 @@ const UserMenu = ({ user, mutate }) => {
 
 const Nav = () => {
   const { data: { user } = {}, mutate } = useCurrentUser();
+  const t = window.localStorage.getItem('token')
 
   return (
     <nav className={styles.nav}>
@@ -111,7 +113,7 @@ const Nav = () => {
             Next.js MongoDB App
           </Link>
           <Container>
-            {user ? (
+            {user && t ? (
               <>
                 <UserMenu user={user} mutate={mutate} />
               </>

@@ -7,8 +7,12 @@ export const createUser = async (email, password, username) => {
 }
 
 export const findUserByEmail
-
   = async (email) => {
     await dbConnect();
     return await User.findOne({ email });
+  };
+export const findUserByEmailAndId
+  = async (email, userId) => {
+    await dbConnect();
+    return await User.findOne({ email, _id: userId }, { password: 0 });
   };

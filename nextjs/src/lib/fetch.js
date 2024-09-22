@@ -1,11 +1,8 @@
-export const fetcher = (...args) => {
-  console.log('---', args)
-  // headers: {
-  //   'Authorization': localStorage.getItem('token')
-  // },
-  return fetch(...args, {
+export const fetcher = (url, option = { method: 'GET' }) => {
+  return fetch(url, {
+    ...option,
     headers: {
-      'Authorization': sessionStorage.getItem('token')
+      'Authorization': localStorage.getItem('token')
     }
   }).then(async (res) => {
     let payload;

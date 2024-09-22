@@ -2,6 +2,8 @@
   border-radius: 100%;
   display: inline-flex;
   justify-content: center;
+  height: 32px;
+  width: 32px;
   align-items: center;
   color: var(--accents-6);
   font-weight: bold;
