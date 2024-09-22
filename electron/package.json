@@ -26,9 +26,10 @@
     "test:linux": "npm run build:pre && xvfb-run --auto-servernum --server-args='-screen 0, 1280x960x24' -- playwright test"
   },
   "engines": {
-    "node": "=18.17.1"
+    "node": ">=18.16.1"
   },
   "dependencies": {
+    "@ant-design/icons-vue": "^7.0.1",
     "@mdi/font": "^7.4.47",
     "ant-design-vue": "4.x",
     "axios": "^0.21.0",
@@ -75,5 +76,9 @@
     "vite-plugin-electron": {
       "electron": "$electron"
     }
+  },
+  "resolutions": {
+    "@typescript-eslint/eslint-plugin": "^7.16.1",
+    "@typescript-eslint/parser": "^7.16.1"
   }
 }

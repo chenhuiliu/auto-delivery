@@ -1,9 +1,9 @@
-import { doRequest } from "@/renderer/utils/request.js";
-const baseUrl = "https://apifoxmock.com/m1/4160691-3800034-default"
+import { request } from "@/renderer/utils/request.js"
+
 // login 登录
 export const login = (option) => {
-  let url = `${baseUrl}/api/login`
-  return doRequest(url, {
+  let url = "/api/login"
+  return request(url, {
     method: "post",
     data: {
       email: option.email,
@@ -13,8 +13,8 @@ export const login = (option) => {
 };
 // sign up 注册
 export const register = (option) => {
-  let url = `${baseUrl}/api/register`
-  return doRequest(url, {
+  let url = "/api/register"
+  return request(url, {
     method: "post",
     data: {
       email: option.email,
@@ -25,31 +25,31 @@ export const register = (option) => {
 };
 // 获取配置列表
 export const getConfigList = () => {
-  let url = `${baseUrl}/api/config`
-  return doRequest(url, {
+  let url = "/api/config"
+  return request(url, {
     method: "get"
   })
 };
 // 新增配置
 export const addConfig = (data) => {
-  let url = `${baseUrl}/api/addConfig`
-  return doRequest(url, {
+  let url = "/api/addConfig"
+  return request(url, {
     method: "post",
     data
   })
 };
 // 修改配置
 export const editConfig = (data) => {
-  let url = `${baseUrl}/api/editConfig`
-  return doRequest(url, {
+  let url = "/api/editConfig"
+  return request(url, {
     method: "post",
     data
   })
 };
 // 获取投递记录
 export const getDeliveryList = () => {
-  let url = `${baseUrl}/api/deliveryList`
-  return doRequest(url, {
+  let url = "/api/deliveryList"
+  return request(url, {
     method: "get"
   })
 };

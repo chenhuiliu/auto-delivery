@@ -1,4 +1,4 @@
-import { LoginScreen, SignUpScreen, ConfigScreen, HomeScreen, RecordScreen } from '@/renderer/screens'
+import { LoginScreen, SignUpScreen, HomeScreen } from '@/renderer/screens'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 export default createRouter({
@@ -9,6 +9,20 @@ export default createRouter({
       component: HomeScreen,
       meta: {
         titleKey: 'title.home'
+      }
+    },
+    {
+      path: '/personal',
+      component: () => import('@/renderer/screens/PersonalCenter.vue'),
+      meta: {
+        titleKey: 'title.personal'
+      }
+    },
+    {
+      path: '/delivery',
+      component: () => import('@/renderer/screens/Delivery.vue'),
+      meta: {
+        titleKey: 'title.delivery'
       }
     },
     {
@@ -26,15 +40,8 @@ export default createRouter({
       }
     },
     {
-      path: '/config',
-      component: ConfigScreen,
-      meta: {
-        titleKey: 'title.config'
-      }
-    },
-    {
       path: '/record',
-      component: RecordScreen,
+      component: () => import('@/renderer/screens/RecordScreen.vue'),
       meta: {
         titleKey: 'title.record'
       }
