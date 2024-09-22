@@ -1,32 +1,38 @@
 <template>
   <div class="record-screen">
-    <a-tabs v-model:activeKey="activeKey" tab-position="left" class="record-tabs">
-      <a-tab-pane :tab="tab.label" v-for="tab in tabList" :key="tab.value">
-        <RecordList :type="tab.value" :list="recordList" />
-      </a-tab-pane>
-    </a-tabs>
+    <div class="search-header">
+      <a-date-picker v-model:value="dateVal" />
+      <a-select
+        ref="select"
+        v-model:value="platformVal"
+        style="width: 150px; margin-left: 20px;"
+        @change="handleChange"
+      >
+        <a-select-option value="all">全部</a-select-option>
+        <a-select-option value="lagoou">拉勾网</a-select-option>
+        <a-select-option value="boss">BOSS直聘</a-select-option>
+        <a-select-option value="zhilian">智联招聘</a-select-option>
+      </a-select>
+      <a-button type="primary" style="margin-left: 20px;">确定</a-button>
+    </div>
+    <div class="serarch-content">
+      <div class="item deliveried">
+        <span>已投递</span>
+        <RecordList :list="recordList" />
+      </div>
+      <div class="item filtered">
+        <span>已过滤</span>
+        <RecordList :list="recordList" />
+      </div>
+    </div>
   </div>
 </template>
 <script setup lang="tsx">
 import { ref, onMounted } from "vue"
 import RecordList from "@/components/RecordList.vue"
 import { getDeliveryList } from "@/renderer/api/index.js"
+import type { Dayjs } from 'dayjs';
 
-const activeKey = ref('boss')
-const tabList = ref([
-  {
-    label: "Boss直聘",
-    value: "boss"
-  },
-  {
-    label: "拉勾网",
-    value: "lagou"
-  },
-  {
-    label: "智联招聘",
-    value: "zhilian"
-  }
-])
 const recordList = ref([{
   id: "1",
   link: "https://www.lagou.com/jobs/123456",
@@ -51,6 +57,12 @@ const recordList = ref([{
   remark: "拉勾网",
   type: "boss"
 }])
+const dateVal = ref<Dayjs>();
+const platformVal = ref("all")
+
+const handleChange = (value: string) => {
+  console.log(`selected ${value}`);
+};
 
 onMounted(() => {
   getDeliveryList().then(res => {
@@ -63,12 +75,18 @@ onMounted(() => {
 </script>
 <style scoped lang="less">
 .record-screen {
-  height: 100vh;
+  height: 100%;
 }
-:deep(.record-tabs) {
-  .ant-tabs-content {
-    height: 100vh;
+.serarch-content {
+  display: flex;
+  justify-content: space-between;
+  height: calc(100% - 30px);
+  .item {
+    margin-top: 20px;
+    height: 100%;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
   }
 }
-
 </style>

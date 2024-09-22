@@ -8,7 +8,10 @@ import {
   InputNumber,
   Tooltip,
   Radio,
-  Tabs
+  Tabs,
+  Layout,
+  Menu,
+  DatePicker
 } from "ant-design-vue"
 import type { App } from "vue"
 export function setupAntd(app: App<Element>) {
@@ -23,4 +26,7 @@ export function setupAntd(app: App<Element>) {
     .use(Tooltip)
     .use(Radio)
     .use(Tabs)
+    .use(Layout)
+    .use(Menu)
+    .use(DatePicker)
 }
