@@ -17,7 +17,9 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, '密码不能为空。'],
   },
-  username: { type: String, required: [true, '用户名不能为空'] }
+  username: { type: String, required: [true, '用户名不能为空'] },
+  code1: { type: String },
+  code1ExpireAt: Date,
 
 });
 export default (mongoose.models.User || mongoose.model('User', UserSchema));

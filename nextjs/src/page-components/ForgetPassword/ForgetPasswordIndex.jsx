@@ -20,7 +20,7 @@ const ForgetPasswordIndex = () => {
     e.preventDefault();
     try {
       setStatus('loading');
-      await fetcher('/api/user/password/reset', {
+      await fetcher('/api/users/password-reset', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

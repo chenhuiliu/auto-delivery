@@ -12,10 +12,10 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <ThemeProvider>
-          <Layout>
-            {children}
-            <Toaster />
-          </Layout>
+          {/* <Layout> */}
+          {children}
+          <Toaster />
+          {/* </Layout> */}
         </ThemeProvider>
       </body>
     </html>

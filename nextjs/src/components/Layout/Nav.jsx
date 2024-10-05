@@ -99,7 +99,7 @@ const UserMenu = ({ user, mutate }) => {
 
 const Nav = () => {
   const { data: { user } = {}, mutate } = useCurrentUser();
-  const t = window.localStorage.getItem('token')
+  const t = window.localStorage.getItem('token');
 
   return (
     <nav className={styles.nav}>

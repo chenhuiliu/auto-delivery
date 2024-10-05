@@ -8,13 +8,13 @@ const limiter = new RateLimiter({ tokensPerInterval: 50, interval: "min", fireIm
 
 export async function POST(request, response, next) {
   const remainingRequests = await limiter.removeTokens(1);
+
   if (remainingRequests < 0) {
     return NextResponse.json(
       { success: false, message: 'Too Many Requests' },
       { status: 429 }
     )
   }
-
   const body = await request.json();
   const { email, password } = body;
   if (!email || !password) {

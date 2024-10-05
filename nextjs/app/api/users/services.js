@@ -16,3 +16,8 @@ export const findUserByEmailAndId
     await dbConnect();
     return await User.findOne({ email, _id: userId }, { password: 0 });
   };
+
+export const updateUser = async (userId, updates) => {
+  await dbConnect();
+  return await User.findByIdAndUpdate(userId, updates, { new: true });
+}

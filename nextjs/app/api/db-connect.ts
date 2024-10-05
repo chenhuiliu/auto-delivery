@@ -11,9 +11,9 @@ declare global {
   };
 }
 
-const { MONGODB_URI } = process.env;
-if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
+const { DB_URL } = process.env;
+if (!DB_URL) {
+  throw new Error('Please define the DB_URL environment variable inside .env.local');
 }
 
 /**
@@ -38,7 +38,7 @@ async function dbConnect() {
       bufferCommands: false,
     };
 
-    cached.promise = connect(MONGODB_URI!, opts).then((mongoose) => {
+    cached.promise = connect(DB_URL!, opts).then((mongoose) => {
       return mongoose;
     });
   }
