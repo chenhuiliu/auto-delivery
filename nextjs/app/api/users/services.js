@@ -21,3 +21,8 @@ export const updateUser = async (userId, updates) => {
   await dbConnect();
   return await User.findByIdAndUpdate(userId, updates, { new: true });
 }
+
+export const findTokenByIdAndType = async (code) => {
+  await dbConnect();
+  return await User.findOne({ code1: code });
+}

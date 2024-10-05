@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { CONFIG as MAIL_CONFIG, sendMail } from '@/lib/mail';
 import { RateLimiter } from "limiter";
-import { updateUser, findUserByEmail } from "../services";
+import { updateUser, findUserByEmail } from "../../services";
 /**
  * 邮箱找回密码
  */
@@ -54,7 +54,8 @@ export async function POST(req, res) {
     html: `
       <div>
         <p>你好， ${email} </p>
-        <p>请点击 <a href="${process.env.VERCEL_URL}/verify-email/${code}">这个链接</a> 以确认你的邮箱。</p>
+        <p>请点击 <a href="${process.env.VERCEL_URL}/forget-password/${code}">这个链接</a> 以确认你的邮箱。</p>
+        <p>如果您直接打不开上面的链接，请直接粘贴到浏览器访问：${process.env.VERCEL_URL}/forget-password/${code}</p>
       </div>
       `,
   });

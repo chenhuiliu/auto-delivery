@@ -19,7 +19,7 @@ const NewPassword = ({ token }) => {
       event.preventDefault();
       setStatus('loading');
       try {
-        await fetcher('/api/user/password/reset', {
+        await fetcher('/api/users/forget-password/pass', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
