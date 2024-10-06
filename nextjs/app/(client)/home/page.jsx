@@ -1,13 +1,13 @@
-'use client'
+"use client";
 import Head from 'next/head';
-import { useRouter } from 'next/navigation';
+
 import { useCurrentUser } from '@/lib/user';
 const FeedPage = () => {
-  const router = useRouter();
+
   const { data: { user } = {}, mutate } = useCurrentUser();
   if (!user) {
-    router.push('/login');
-    return null;
+    // 跳转到 login
+
   }
 
   return (

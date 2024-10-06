@@ -9,8 +9,9 @@ import Link from 'next/link';
 import { useCallback, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import styles from './ForgetPassword.module.css';
+import md5 from 'md5'
 
-const NewPassword = ({ token }) => {
+const NewPassword = ({ token, email }) => {
   const passwordRef = useRef();
   // 'loading' | 'success'
   const [status, setStatus] = useState();
@@ -19,12 +20,13 @@ const NewPassword = ({ token }) => {
       event.preventDefault();
       setStatus('loading');
       try {
-        await fetcher('/api/users/forget-password/pass', {
-          method: 'PUT',
+        await fetcher('/api/users/password-reset/pass', {
+          method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             token,
-            password: passwordRef.current.value,
+            email,
+            password: md5(passwordRef.current.value),
           }),
         });
         setStatus('success');
@@ -100,10 +102,10 @@ const BadLink = () => {
   );
 };
 
-const ForgetPasswordToken = ({ valid, token }) => {
+const ForgetPasswordToken = ({ valid, token, email }) => {
   return (
     <Wrapper className={styles.root}>
-      {valid ? <NewPassword token={token} /> : <BadLink />}
+      {valid ? <NewPassword token={token} email={email} /> : <BadLink />}
     </Wrapper>
   );
 };

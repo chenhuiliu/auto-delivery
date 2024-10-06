@@ -12,31 +12,25 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import styles from './Auth.module.css';
+import md5 from 'md5';
 
 const Login = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
 
   const [isLoading, setIsLoading] = useState(false);
-
-  const { data: { user } = {}, mutate, isValidating } = useCurrentUser();
   const router = useRouter();
-  useEffect(() => {
-    if (isValidating) return;
-    if (user) router.replace('/home');
-  }, [user, router, isValidating]);
 
   const onSubmit = useCallback(
     async (event) => {
       setIsLoading(true);
       event.preventDefault();
-
       fetcher('/api/users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: emailRef.current.value,
-          password: passwordRef.current.value,
+          password: md5(passwordRef.current.value),
         }),
       }).then((response) => {
         window.localStorage.setItem('token', response.data.token);
@@ -47,9 +41,8 @@ const Login = () => {
       }).finally(() => {
         setIsLoading(false);
       });
-      // mutate({ user: response.user }, false);
     },
-    [mutate]
+    []
   );
 
   return (
@@ -95,7 +88,6 @@ const Login = () => {
         </form>
       </div>
       <div className={styles.footer}>
-
         <TextLink color="link" href="/sign-up" variant="highlight">
           Don&apos;t have an account? Sign Up
         </TextLink>

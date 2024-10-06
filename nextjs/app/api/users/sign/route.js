@@ -1,13 +1,14 @@
 import { createUser, findUserByEmail } from './../services'
 import { NextResponse } from 'next/server';
 import { RateLimiter } from "limiter";
+// 每分钟 5 次
 const limiter = new RateLimiter({ tokensPerInterval: 5, interval: "min", fireImmediately: false });
 
 export async function POST(request, response) {
   const remainingRequests = await limiter.removeTokens(1);
   if (remainingRequests < 0) {
     return NextResponse.json(
-      { success: false, message: 'Too Many Requests' },
+      { success: false, message: '请求次数过多。' },
       { status: 429 }
     )
   }
@@ -22,7 +23,11 @@ export async function POST(request, response) {
   }
   try {
     const andUser = await createUser(email, password, username);
-    return NextResponse.json(andUser, { status: 200 });
+    return NextResponse.json(
+      {
+        success: true, message: '创建成功。'
+      },
+      { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: error }, { status: 403 });
   }

@@ -56,3 +56,36 @@ export const ButtonLink = forwardRef(function Button(
     </a>
   );
 });
+
+export const ButtonDiv = forwardRef(function Button(
+  {
+    children,
+    type,
+    className,
+    onClick,
+    size,
+    variant = 'invert',
+    loading,
+    disabled,
+  },
+  ref
+) {
+  return (
+    <div
+      className={clsx(
+        styles.button,
+        type && styles[type],
+        size && styles[size],
+        styles[variant],
+        className
+      )}
+      ref={ref}
+      onClick={onClick}
+      disabled={loading || disabled}
+    >
+      {loading && <LoadingDots className={styles.loading} />}
+      <span>{children}</span>
+    </div>
+  );
+
+});

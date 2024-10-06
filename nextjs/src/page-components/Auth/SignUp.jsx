@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import styles from './Auth.module.css';
+import md5 from 'md5';
 
 const SignUp = () => {
   const emailRef = useRef();
@@ -25,13 +26,18 @@ const SignUp = () => {
   const onSubmit = useCallback(
     async (e) => {
       e.preventDefault();
+      if (passwordRef.current.value.length < 6) {
+        toast.error('密码不能小于 6 位。');
+        return;
+      }
+
       setIsLoading(true);
       fetcher('/api/users/sign', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: emailRef.current.value,
-          password: passwordRef.current.value,
+          password: md5(passwordRef.current.value),
           username: usernameRef.current.value,
         }),
       }).then((response) => {

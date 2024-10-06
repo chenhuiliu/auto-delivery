@@ -9,12 +9,17 @@ const ResetPasswordTokenPage = async ({
   const item = await findTokenByIdAndType(
     token
   ) ?? {};
+  let isValid = !!item;
+  // 验证当前时间是否过期
+  if (!item || Date.now() > item.code1ExpireAt) {
+    isValid = false;
+  }
   return (
     <>
       <Head>
         <title>Forget password</title>
       </Head>
-      <ForgetPasswordToken valid={!!item} token={item.code1} />
+      <ForgetPasswordToken valid={isValid} email={item.email} token={item.code1} />
     </>
   );
 };

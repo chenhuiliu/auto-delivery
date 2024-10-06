@@ -5,16 +5,15 @@ import { updateUser, findUserByEmail } from "../../services";
 /**
  * 邮箱找回密码
  */
-
-const limiter = new RateLimiter({ tokensPerInterval: 50, interval: "min", fireImmediately: true });
+/**
+ * 一分钟 10次
+ */
+const limiter = new RateLimiter({ tokensPerInterval: 3, interval: "min", fireImmediately: true });
 
 function generateCustomToken() {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let id = '';
-  for (let i = 0; i < 10; i++) {
-    id += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-  return id;
+  const timestamp = Date.now();
+  const randomNum = Math.floor(1000 + Math.random() * 9000);
+  return `${timestamp}${randomNum}`;
 }
 export async function POST(req, res) {
   // 截流 
@@ -22,7 +21,7 @@ export async function POST(req, res) {
 
   if (remainingRequests < 0) {
     return NextResponse.json(
-      { success: false, message: 'Too Many Requests' },
+      { success: false, message: '请求次数过多。' },
       { status: 429 }
     )
   }
@@ -43,7 +42,7 @@ export async function POST(req, res) {
     user._id,
     {
       code1: code,
-      code1ExpireAt: new Date(Date.now() + 1000 * 60 * 60 * 24),
+      code1ExpireAt: new Date(Date.now() + 1000 * 60 * 60 * 24), // 24 小时有效
     }
   )
 
@@ -54,8 +53,9 @@ export async function POST(req, res) {
     html: `
       <div>
         <p>你好， ${email} </p>
-        <p>请点击 <a href="${process.env.VERCEL_URL}/forget-password/${code}">这个链接</a> 以确认你的邮箱。</p>
-        <p>如果您直接打不开上面的链接，请直接粘贴到浏览器访问：${process.env.VERCEL_URL}/forget-password/${code}</p>
+        <p>欢迎您使用【找工作助手】服务，您的邮箱验证码为:${code}  有效期是 24 小时。</p>
+        <p>如果该邮件误发给了您，您无需执行任何操作。</p>
+        <p>此邮件由系统自动产生，请勿回复。</p>
       </div>
       `,
   });
