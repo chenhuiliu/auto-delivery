@@ -14,7 +14,8 @@ export async function GET(request, response) {
         status: 401
       });
     }
-    return NextResponse.json({ user });
+
+    return NextResponse.json({ data: { ...user._doc, token: null, tokenExpireAt: null, code1: null, code1ExpireAt: null } });
   } else {
     return NextResponse.json({ error: { message: '401' } }, {
       status: 401

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script type="text/javascript">
+    // 发送 请求 featch /api/getUserinfo
+    function sendRequest() {
+      fetch('http://localhost:3000/api/auth/user-info', {
+        headers: {
+          'Authorization': 'eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImZlbmdsdWhvbWVAMTYzLmNvbSIsImlkIjoiNjcwMjY3ZGJhZTc5YmNjNTVkOGEyMjAyIiwiaWF0IjoxNzI4MjI1MTM4LCJleHAiOjE3Mjg4Mjk5Mzh9.GKvRUOyYZ1EeHCgEeIhTWpZAXRmuqCdEWYPeEmbHXeA'
+        }
+      })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => {
+          console.error('Error:', error)
+        });
+    }
+    sendRequest()
+  </script>
+</body>
+
+</html>
