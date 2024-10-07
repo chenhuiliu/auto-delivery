@@ -34,3 +34,7 @@ export const findTokenByIdAndType = async (code) => {
   await dbConnect();
   return await User.findOne({ code1: code });
 }
+export const findUserByToken = async (token) => {
+  await dbConnect();
+  return await User.findOne({ token });
+}

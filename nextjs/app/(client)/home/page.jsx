@@ -1,14 +1,25 @@
-"use client";
 import Head from 'next/head';
+import { findUserByToken } from '../../api/users/services';
+import { redirect } from 'next/navigation'
+import { cookies, headers } from 'next/headers'
+export default async () => {
+  //  获取 cookie 在服务的渲染
+  const cookieStore = cookies()
+  const authorization = cookieStore.get('token')
 
-import { useCurrentUser } from '@/lib/user';
-const FeedPage = () => {
-
-  const { data: { user } = {}, mutate } = useCurrentUser();
-  if (!user) {
-    // 跳转到 login
-
+  if (!authorization.value) {
+    return redirect('/login')
   }
+
+  const user = await findUserByToken(authorization.value);
+  if (!user || (user && (user.token !== authorization.value))) {
+    return redirect('/login');
+  }
+
+  if (user.email !== 'fengluhome@163.com') {
+    return redirect('/login');
+  }
+
 
   return (
     <>
@@ -16,9 +27,10 @@ const FeedPage = () => {
         <title>Feed</title>
       </Head>
       <div>
-        home admin
+        home admin <br />
+        {authorization.value}
       </div>
     </>
   );
 };
-export default FeedPage;
+
